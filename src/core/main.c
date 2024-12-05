@@ -17,9 +17,21 @@ FILE_SECBOOT ( PERMITTED );
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdio.h>
 #include <ipxe/init.h>
 #include <ipxe/version.h>
 #include <usr/autoboot.h>
+#include <ipxe/dhcp.h>
+#include <ipxe/settings.h>
+#include <stdlib.h>
+
+/** The "scriptlet" setting */
+const struct setting scriptlet_setting __setting ( SETTING_MISC, scriptlet ) = {
+	.name = "scriptlet",
+	.description = "Boot scriptlet",
+	.tag = DHCP_EB_SCRIPTLET,
+	.type = &setting_type_string,
+};
 
 /**
  * Main entry point
@@ -27,7 +39,8 @@ FILE_SECBOOT ( PERMITTED );
  * @ret rc		Return status code
  */
 __asmcall int main ( void ) {
-	int rc;
+	char *scriptlet;
+	int rc = 0;
 
 	/* Perform one-time-only initialisation (e.g. heap) */
 	initialise();
@@ -37,10 +50,14 @@ __asmcall int main ( void ) {
 	startup();
 
 	/* Attempt to boot */
-	if ( ( rc = ipxe ( NULL ) ) != 0 )
-		goto err_ipxe;
+	fetch_string_setting_copy ( NULL, &scriptlet_setting,
+					&scriptlet );
+	if ( scriptlet ) {
+		/* User has defined a scriptlet; execute it */
+		rc = system ( scriptlet );
+		free ( scriptlet );
+	}
 
- err_ipxe:
 	shutdown_exit();
 	return rc;
 }

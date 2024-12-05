@@ -64,5 +64,6 @@ extern int show_menu ( struct dynamic_ui *dynui, unsigned long timeout,
 		       unsigned long retimeout, const char *select,
 		       struct dynamic_item **selected );
 extern int show_form ( struct dynamic_ui *dynui );
+extern int parse_dynui ( char *text, struct dynamic_ui **dynui );
 
 #endif /* _IPXE_DYNUI_H */

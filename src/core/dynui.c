@@ -31,8 +31,10 @@ FILE_SECBOOT ( PERMITTED );
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <errno.h>
 #include <ipxe/list.h>
 #include <ipxe/dynui.h>
 
@@ -218,4 +220,28 @@ struct dynamic_item * dynui_shortcut ( struct dynamic_ui *dynui, int key ) {
 	}
 
 	return NULL;
+}
+
+
+/**
+ * Parse dynamic user interface name
+ *
+ * @v text		Text
+ * @ret dynui		Dynamic user interface
+ * @ret rc		Return status code
+ */
+int parse_dynui ( char *text, struct dynamic_ui **dynui ) {
+
+	/* Find user interface */
+	*dynui = find_dynui ( text );
+	if ( ! *dynui ) {
+		if ( text ) {
+			printf ( "\"%s\": no such user interface\n", text );
+		} else {
+			printf ( "No default user interface\n" );
+		}
+		return -ENOENT;
+	}
+
+	return 0;
 }
