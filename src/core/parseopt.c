@@ -194,29 +194,6 @@ int parse_netdev_configurator ( char *text,
 }
 
 /**
- * Parse dynamic user interface name
- *
- * @v text		Text
- * @ret dynui		Dynamic user interface
- * @ret rc		Return status code
- */
-int parse_dynui ( char *text, struct dynamic_ui **dynui ) {
-
-	/* Find user interface */
-	*dynui = find_dynui ( text );
-	if ( ! *dynui ) {
-		if ( text ) {
-			printf ( "\"%s\": no such user interface\n", text );
-		} else {
-			printf ( "No default user interface\n" );
-		}
-		return -ENOENT;
-	}
-
-	return 0;
-}
-
-/**
  * Parse flag
  *
  * @v text		Text (ignored)
