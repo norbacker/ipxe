@@ -168,10 +168,10 @@ static int rtc_entropy_check ( void ) {
 	for ( i = 0 ; i < RTC_MAX_WAIT_MS ; i++ ) {
 
 		/* Allow interrupts to occur */
-		__asm__ __volatile__ ( "sti\n\t"
+		__asm__ __volatile__ ( INTERRUPT_CODE ( "sti\n\t"
 				       "nop\n\t"
 				       "nop\n\t"
-				       "cli\n\t" );
+				       "cli\n\t" ) );
 
 		/* Check for RTC interrupt flag */
 		if ( rtc_flag ) {

@@ -60,10 +60,10 @@ static unsigned long bios_currticks ( void ) {
 	uint8_t midnight;
 
 	/* Re-enable interrupts so that the timer interrupt can occur */
-	__asm__ __volatile__ ( "sti\n\t"
+	__asm__ __volatile__ ( INTERRUPT_CODE ( "sti\n\t"
 			       "nop\n\t"
 			       "nop\n\t"
-			       "cli\n\t" );
+			       "cli\n\t" ) );
 
 	/* Read current BIOS time of day */
 	get_real ( ticks, BDA_SEG, BDA_TICKS );

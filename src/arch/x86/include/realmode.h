@@ -6,6 +6,7 @@
 #include <registers.h>
 #include <librm.h>
 #include <ipxe/uaccess.h>
+#include <config/general.h>
 
 /*
  * Data structures and type definitions
@@ -137,5 +138,22 @@ copy_from_real ( void *dest, unsigned int src_seg,
  *			      : "=a" ( character ) : "a" ( 0x0000 ) );
  *
  */
+
+/**
+ * INTERRUPT_CODE ( asm_code_str )
+ *
+ * This can be used in inline assembly handling hardware interrupts
+ * to create a fragment of code that will execute in either real mode
+ * or protected mode. Real mode interrupts will incur additional overhead,
+ * especially on virtual systems, but might be required on older systems
+ * with flaky BIOSes.
+ */
+#ifdef LEGACY_BIOS_WORKAROUND
+#define INTERRUPT_CODE( asm_code_str ) \
+	REAL_CODE ( asm_code_str ) : :
+#else
+#define INTERRUPT_CODE( asm_code_str ) \
+	asm_code_str
+#endif
 
 #endif /* REALMODE_H */

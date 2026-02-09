@@ -304,6 +304,10 @@ FILE_SECBOOT ( PERMITTED );
 #define TIVOLI_VMM_WORKAROUND	/* Work around the Tivoli VMM's garbling of SSE
 				 * registers when iPXE traps to it due to
 				 * privileged instructions */
+//#define LEGACY_BIOS_WORKAROUND/* Force HW interrupts to fire in real mode */
+				/* Really old BIOSes (486 era and older) won't
+				 * handle the trampolining from protected mode
+				 * reliably */
 //#define ERRMSG_80211		/* All 802.11 error descriptions (~3.3kb) */
 
 #include <config/named.h>
